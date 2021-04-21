@@ -23,6 +23,19 @@ app.get('/', (req, res) => {
     }
   })
 })
+app.get('/:id', (req, res) => {
+  connection.query(
+    'SELECT * from cards WHERE id = ?',
+    req.params.id,
+    (err, results) => {
+      if (err) {
+        res.status(500).send('Error retrieving data')
+      } else {
+        res.status(200).json(results)
+      }
+    }
+  )
+})
 app.post('/', (req, res) => {
   connection.query('INSERT INTO cards SET ?', req.body, err => {
     if (err) {
@@ -41,4 +54,22 @@ app.delete('/:id', (req, res) => {
     }
   })
 })
+
+app.put('/:id', (req, res) => {
+  const idConcept = req.params.id
+  const newConcept = req.body
+
+  connection.query(
+    'UPDATE cards SET ? WHERE id = ?',
+    [newConcept, idConcept],
+    err => {
+      if (err) {
+        res.status(500).send('Error updating a card')
+      } else {
+        res.status(200).send('Concept updated successfully 🎉')
+      }
+    }
+  )
+})
+
 app.listen(4242, () => console.log('Express server is running'))

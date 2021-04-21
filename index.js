@@ -32,4 +32,13 @@ app.post('/', (req, res) => {
     }
   })
 })
+app.delete('/:id', (req, res) => {
+  connection.query('DELETE FROM cards WHERE id = ?', req.params.id, err => {
+    if (err) {
+      res.status(500).send('Error deleting a card')
+    } else {
+      res.status(200).send('Successfully deleted')
+    }
+  })
+})
 app.listen(4242, () => console.log('Express server is running'))
